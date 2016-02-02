@@ -1,4 +1,4 @@
-Things to do:
+#Things to do
 
 - Try to print whole screen
 -- Find out cols and rows of screen
