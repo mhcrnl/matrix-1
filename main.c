@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define KRED "\x1B[0m"
+
 void delay(int millis);
 
 int main(int argc, char *args[]) {
@@ -29,13 +31,17 @@ int main(int argc, char *args[]) {
   filler[len+1] = '\0';
   bla[len+1] = '\0';
 
+  printf("%sreddddddd\n\n\n", KRED);
+
   /* Print the string */
   while(1) {
-    printf("\f");
+    printf("\033[0;0H");
+    printf("\033[31m");
     printf("%s", filler);
     fflush(stdout);
     delay(500);
-    printf("\f");
+    printf("\033[0;0H");
+    printf("\033[34m");
     printf("%s", bla);
     fflush(stdout);
     delay(500);
