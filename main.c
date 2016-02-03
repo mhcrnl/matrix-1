@@ -21,8 +21,8 @@ struct Window {
 };
 
 void delay(int millis);
-void getWindow(Window *window);
-void createTrail(struct Trail *new_trail, int x, int y, int len);
+void getWindow(struct Window *window);
+void createTrail(struct Trail *new_trail, int x, int len);
 void clearScreen(struct Window *window);
 void printTrails(struct Trail *trail1, struct Trail *trail2, struct Trail *trail3, struct Trail *trail4);
 
@@ -43,7 +43,7 @@ int main(int argc, char *args[]) {
   trail4.y = 20;
 
   clearScreen(&window);
-  printTrails(&trail1, &trail2, &trail3, &trail4);
+  /* printTrails(&trail1, &trail2, &trail3, &trail4);*/
 
   return 0;
 }
@@ -96,5 +96,6 @@ void clearScreen(struct Window *window) {
   for(i = 0; i < window->col * window->row; i++) {
     printf(" ");
   }
+  fflush(stdout);
 }
 
