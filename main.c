@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define ESC "\033"
 #define KRED "\033[0m"
 #define MAXLEN 20
 
@@ -14,18 +15,35 @@ struct Trail {
   char seq[MAXLEN];
 };
 
+struct Window {
+  int row;
+  int col;
+};
+
 void delay(int millis);
-void getWindow(int *row, int *col);
+void getWindow(Window *window);
 void createTrail(struct Trail *new_trail, int x, int y, int len);
+void clearScreen(struct Window *window);
+void printTrails(struct Trail *trail1, struct Trail *trail2, struct Trail *trail3, struct Trail *trail4);
 
 int main(int argc, char *args[]) {
-  struct Trail trail1, trail2;
+  struct Window window;
+  getWindow(&window);
 
-  createTrail(&trail1, 5, 10, 15);
-  createTrail(&trail2, 1, 4, 9);
+  struct Trail trail1, trail2, trail3, trail4;
 
-  printf("Trail 1:\nx: %d, y: %d, len: %d\n\n", trail1.x, trail1.y, trail1.len);
-  printf("Trail 2:\nx: %d, y: %d, len: %d", trail2.x, trail2.y, trail2.len);
+  createTrail(&trail1, 5, 15);
+  createTrail(&trail2, 1, 9);
+  createTrail(&trail3, 10, 7);
+  createTrail(&trail4, 14, 13);
+
+  trail1.y = 7;
+  trail2.y = 10;
+  trail3.y = 2;
+  trail4.y = 20;
+
+  clearScreen(&window);
+  printTrails(&trail1, &trail2, &trail3, &trail4);
 
   return 0;
 }
@@ -43,7 +61,7 @@ void delay(int millis) {
   }
 }
 
-void getWindow(int *row, int *col) {
+void getWindow(struct Window *window) {
   /* Initialize some variables */
   struct winsize size;
 
@@ -51,9 +69,8 @@ void getWindow(int *row, int *col) {
   ioctl(STDOUT_FILENO, TIOCGWINSZ, &size);
 
   /* Stash them variables */
-  *row = size.ws_row;
-  *col = size.ws_col;
-
+  window->row = size.ws_row;
+  window->col = size.ws_col;
 }
 
 void createTrail(struct Trail *new_trail, int x, int len) {
@@ -66,6 +83,18 @@ void createTrail(struct Trail *new_trail, int x, int len) {
 
   for (i = 0; i < len; i++) {
     new_trail->seq[i] = 'a';
+  }
+}
+
+void printTrails(struct Trail *trail1, struct Trail *trail2, struct Trail *trail3, struct Trail *trail4) {
+  printf("trails");
+}
+
+void clearScreen(struct Window *window) {
+  int i;
+  printf("\033[0;0H");
+  for(i = 0; i < window->col * window->row; i++) {
+    printf(" ");
   }
 }
 
