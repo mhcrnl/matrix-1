@@ -11,6 +11,7 @@
 
 #define MAXLEN 20 /* The maximum length for the trails */
 
+
 /* Defintion of the Trail struct */
 struct Trail {
   int x;
@@ -39,6 +40,9 @@ int main(int argc, char *args[]) {
   struct Window window;
   getWindow(&window);
 
+  /* Set up randomness */
+  srand(time(NULL));
+
   /* From here on is testing */
   struct Trail trail1, trail2, trail3, trail4;
 
@@ -52,12 +56,16 @@ int main(int argc, char *args[]) {
   trail3.y = 2;
   trail4.y = 20;
 
-  clearScreen(&window);
+  /* clearScreen(&window);*/
   /* printTrails(&trail1, &trail2, &trail3, &trail4);*/
-  printTrail(&trail1);
-  printTrail(&trail2);
-  printTrail(&trail3);
-  printTrail(&trail4);
+  /* printTrail(&trail1);*/
+  /* printTrail(&trail2);*/
+  /* printTrail(&trail3);*/
+  /* printTrail(&trail4);*/
+
+  for(int i = 0; i < 15; i++) {
+    printf("%d\t", rand()%10);
+  }
 
   return 0;
 }
