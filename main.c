@@ -33,6 +33,8 @@ void getWindow(struct Window *window);
 void createTrail(struct Trail *new_trail, int x, int len);
 void clearScreen(struct Window *window);
 void printTrail(struct Trail *trail, struct Window *window);
+void printAll(struct Trail trailArray[], struct Window *window);
+int getRand(int n, int m);
 
 int main(int argc, char *args[]) {
   /* First get the window info and store it
@@ -43,28 +45,24 @@ int main(int argc, char *args[]) {
   /* Set up randomness */
   srand(time(NULL));
 
-  /* From here on is testing */
-  struct Trail trail1, trail2, trail3, trail4;
+  struct Trail trailArray[window.col*2];
+  /* printf("struct: %lu\n", sizeof(struct Trail));*/
+  /* printf("trailarray: %lu\n", sizeof(trailArray));*/
+  /* printf("dus: %d, ofwel: %d\n", (int)( sizeof(trailArray)/sizeof(struct Trail)), window.col * 2);*/
 
-  createTrail(&trail1, 5, 15);
-  createTrail(&trail2, 1, 9);
-  createTrail(&trail3, 10, 7);
-  createTrail(&trail4, 14, 13);
+  int x=0;
+  while(1) {
+    if(x < window.col) {
+      createTrail(&trailArray[x], x, getRand(4, 15));
+    }
 
-  trail1.y = 7;
-  trail2.y = 10;
-  trail3.y = 2;
-  trail4.y = 20;
+    printAll(trailArray, &window);
 
-  /* clearScreen(&window);*/
-  /* printTrails(&trail1, &trail2, &trail3, &trail4);*/
-  /* printTrail(&trail1);*/
-  /* printTrail(&trail2);*/
-  /* printTrail(&trail3);*/
-  /* printTrail(&trail4);*/
-
-  for(int i = 0; i < 15; i++) {
-    printf("%d\t", rand()%10);
+    x++;
+    if(x == window.row) {
+      x = 0;
+    }
+    delay(40);
   }
 
   return 0;
@@ -157,5 +155,31 @@ void clearScreen(struct Window *window) {
 
   /* Just to be sure, flush the stdout */
   fflush(stdout);
+}
+
+int getRand(int n, int m) {
+  return n + rand() % (m-n);
+}
+
+void printAll(struct Trail trailArray[], struct Window *window) {
+  /* printf("%d, %d\n", window->col, window->row);*/
+  /* printf("Bijv: %d\n", trailArray[0].len);*/
+  int i;
+
+  printf("test");
+  printf("struct: %lu", sizeof(struct Trail));
+
+  /* while(trailArray[i] != NULL) {*/
+  /*   printf("%d\n", trailArray[i].len);*/
+  /*   i++;*/
+  /* }*/
+
+  /* clearScreen(window);*/
+  for(i = 0; i < window->col * 2; i++) {
+    printf("%d\n", trailArray[i].len);
+    /* printTrail(&trailArray[i], &window);*/
+  }
+  fflush(stdout);
+
 }
 
