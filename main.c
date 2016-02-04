@@ -45,7 +45,8 @@ int main(int argc, char *args[]) {
   /* Set up randomness */
   srand(time(NULL));
 
-  struct Trail trailArray[window.col*2];
+  /* struct Trail trailArray[window.col*2];*/
+  struct Trail *trailArray = malloc(sizeof(struct Trail) * window.col);
   /* printf("struct: %lu\n", sizeof(struct Trail));*/
   /* printf("trailarray: %lu\n", sizeof(trailArray));*/
   /* printf("dus: %d, ofwel: %d\n", (int)( sizeof(trailArray)/sizeof(struct Trail)), window.col * 2);*/
@@ -59,6 +60,9 @@ int main(int argc, char *args[]) {
     printAll(trailArray, &window);
 
     x++;
+    if(x > 10) {
+      break;
+    }
     if(x == window.row) {
       x = 0;
     }
@@ -167,7 +171,7 @@ void printAll(struct Trail trailArray[], struct Window *window) {
   int i;
 
   printf("test");
-  printf("struct: %lu", sizeof(struct Trail));
+  printf("struct: %lu\n", sizeof(struct Trail));
 
   /* while(trailArray[i] != NULL) {*/
   /*   printf("%d\n", trailArray[i].len);*/
@@ -175,7 +179,7 @@ void printAll(struct Trail trailArray[], struct Window *window) {
   /* }*/
 
   /* clearScreen(window);*/
-  for(i = 0; i < window->col * 2; i++) {
+  for(i = 0; i < window->col; i++) {
     printf("%d\n", trailArray[i].len);
     /* printTrail(&trailArray[i], &window);*/
   }
