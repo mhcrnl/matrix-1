@@ -32,7 +32,7 @@ void delay(int millis);
 void getWindow(struct Window *window);
 void createTrail(struct Trail *new_trail, int x, int len);
 void clearScreen(struct Window *window);
-void printTrail(struct Trail *trail);
+void printTrail(struct Trail *trail, struct Window *window);
 
 int main(int argc, char *args[]) {
   /* First get the window info and store it
@@ -112,7 +112,7 @@ void createTrail(struct Trail *new_trail, int x, int len) {
   }
 }
 
-void printTrail(struct Trail *trail) {
+void printTrail(struct Trail *trail, struct Window *window) {
   /* This function prints the trail at the
    * right position. */
 
@@ -125,6 +125,10 @@ void printTrail(struct Trail *trail) {
      * Obviously we need to add i, because
      * we're moving down through the trail */
     print_y = trail->y + i;
+
+    if(print_y > window->row) {
+      break;
+    }
 
     /* Trail is green, except for the head of the
      * trail. That character is white */
