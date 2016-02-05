@@ -9,8 +9,8 @@
 #define TRM_GREEN "\033[32m"
 #define TRM_WHITE "\033[37m"
 
-#define MINLEN 6
-#define MAXLEN 20 /* The maximum length for the trails */
+#define MINLEN 20
+#define MAXLEN 35 /* The maximum length for the trails */
 
 
 /* Defintion of the Trail struct */
@@ -38,7 +38,7 @@ void printTrail(trail_t *trail, struct Window *window);
 void printAll(trail_t *trails, struct Window *window, int incr);
 int getRand(int n, int m);
 void tryNewTrail(trail_t *trails, struct Window *window);
-void deleteTrail(trail_t *trails);
+void deleteTrail(trail_t **trails);
 
 int main(int argc, char *args[]) {
   /* First get the window info and store it
@@ -55,12 +55,12 @@ int main(int argc, char *args[]) {
   trails->next = NULL;
 
   while(1) {
-    if(getRand(1,5) == 1) {
+    /* if(getRand(1,3) == 1) {*/
       /* printf("yes");*/
       /* fflush(stdout);*/
       /* delay(500);*/
       tryNewTrail(trails, window);
-    }
+    /* }*/
 
     printAll(trails, window, 1);
     delay(40);
@@ -199,13 +199,21 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
     printTrail(current, window);
     current->y += incr; /* Increment y afterwards, so it moves down */
     if(current->y > window->row) {
-      deleteTrail(previous);
+      deleteTrail(&previous);
     }
     previous = current;
     current = current->next;
   }
 
-  printf("\033[%d;%dH", window->row, window->col);
+  printf("\033[%d;0H", window->row);
+
+  current = trails->next;
+  while(current != NULL) {
+    printf("%d->", current->x);
+    current = current->next;
+  }
+  printf("#");
+
   fflush(stdout);
 
 }
@@ -223,23 +231,27 @@ void tryNewTrail(trail_t *trails, struct Window *window) {
   }
 
   for(int i = 0; i < window->col; i++) {
-    if(free[i] == 0 && getRand(0,window->col-n) == 1) {
+    if(free[i] == 0 && getRand(0,(window->col-n)) == 1) {
     /* if(free[i] == 0 ) {*/
       createTrail(trails, i, getRand(MINLEN, MAXLEN));
-      break;
+      /* break;*/
     }
   }
 }
 
-void deleteTrail(trail_t *node) {
-  /* printf("yes");*/
+void deleteTrail(trail_t **node) {
   trail_t *temp = NULL;
-  temp = malloc(sizeof(trail_t));
-  temp = node->next; /* the node to remove */
+  temp = (*node)->next; /* the node to remove */
   if(temp->next != NULL) {
-    node->next = temp->next;
+    (*node)->next = temp->next;
+    /* free(temp);*/
   } else {
-    node->next = NULL;
+    /* free(temp);*/
+    (*node)->next = NULL;
   }
-  free(temp);
+  if(temp == NULL) {
+    printf("ERRORRR!");
+    exit(1);
+  }
+  /* free(temp);*/
 }
