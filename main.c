@@ -38,6 +38,7 @@ void printTrail(trail_t *trail, struct Window *window);
 void printAll(trail_t *trails, struct Window *window, int incr);
 int getRand(int n, int m);
 void tryNewTrail(trail_t *trails, struct Window *window);
+void deleteTrail(trail_t *trails);
 
 int main(int argc, char *args[]) {
   /* First get the window info and store it
@@ -187,6 +188,7 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
   /* This function prints all the exisiting trails */
   int i;
   trail_t *current = trails->next;
+  trail_t *previous = trails;
 
   /* First clear the whole screen */
   clearScreen(window);
@@ -196,6 +198,10 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
   while(current != NULL) {
     printTrail(current, window);
     current->y += incr; /* Increment y afterwards, so it moves down */
+    if(current->y > window->row) {
+      deleteTrail(previous);
+    }
+    previous = current;
     current = current->next;
   }
 
@@ -225,3 +231,15 @@ void tryNewTrail(trail_t *trails, struct Window *window) {
   }
 }
 
+void deleteTrail(trail_t *node) {
+  /* printf("yes");*/
+  trail_t *temp = NULL;
+  temp = malloc(sizeof(trail_t));
+  temp = node->next; /* the node to remove */
+  if(temp->next != NULL) {
+    node->next = temp->next;
+  } else {
+    node->next = NULL;
+  }
+  free(temp);
+}
