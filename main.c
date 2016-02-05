@@ -9,6 +9,7 @@
 #define TRM_GREEN "\033[32m"
 #define TRM_WHITE "\033[37m"
 
+#define MINLEN 6
 #define MAXLEN 20 /* The maximum length for the trails */
 
 
@@ -36,6 +37,7 @@ void clearScreen(struct Window *window);
 void printTrail(trail_t *trail, struct Window *window);
 void printAll(trail_t *trails, struct Window *window, int incr);
 int getRand(int n, int m);
+void tryNewTrail(trail_t *trails, struct Window *window);
 
 int main(int argc, char *args[]) {
   /* First get the window info and store it
@@ -51,14 +53,26 @@ int main(int argc, char *args[]) {
   trails = malloc(sizeof(trail_t));
   trails->next = NULL;
 
-  /* Testing down here */
-  for(int i = 0; i < window->col; i++) {
-    createTrail(trails, i, getRand(4,9));
-  }
   while(1) {
+    if(getRand(1,5) == 1) {
+      /* printf("yes");*/
+      /* fflush(stdout);*/
+      /* delay(500);*/
+      tryNewTrail(trails, window);
+    }
+
     printAll(trails, window, 1);
     delay(40);
   }
+
+  /* Testing down here */
+  /* for(int i = 0; i < window->col; i++) {*/
+  /*   createTrail(trails, i, getRand(4,9));*/
+  /* }*/
+  /* while(1) {*/
+  /*   printAll(trails, window, 1);*/
+  /*   delay(40);*/
+  /* }*/
 
   return 0;
 }
@@ -184,5 +198,26 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
 
   fflush(stdout);
 
+}
+
+void tryNewTrail(trail_t *trails, struct Window *window) {
+  int *free = malloc(sizeof(int) * window->col);
+  int n = 0;
+  trail_t *current = trails->next;
+
+  while(current != NULL) {
+    free[current->x] = 1;
+    n++;
+    printf("#");
+    current = current->next;
+  }
+
+  for(int i = 0; i < window->col; i++) {
+    if(free[i] == 0 && getRand(0,4) == 1) {
+    /* if(free[i] == 0 ) {*/
+      createTrail(trails, i, getRand(MINLEN, MAXLEN));
+      break;
+    }
+  }
 }
 
