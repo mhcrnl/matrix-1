@@ -34,7 +34,7 @@ void getWindow(struct Window *window);
 void createTrail(trail_t *trails, int x, int len);
 void clearScreen(struct Window *window);
 void printTrail(trail_t *trail, struct Window *window);
-void printAll(trail_t *trails, struct Window *window);
+void printAll(trail_t *trails, struct Window *window, int incr);
 int getRand(int n, int m);
 
 int main(int argc, char *args[]) {
@@ -54,10 +54,13 @@ int main(int argc, char *args[]) {
   /* printf("trailarray: %lu\n", sizeof(trailArray));*/
   /* printf("dus: %d, ofwel: %d\n", (int)( sizeof(trailArray)/sizeof(struct Trail)), window.col * 2);*/
 
-  for(int i = 0; i < 5; i++) {
+  for(int i = 0; i < window->col; i++) {
     createTrail(trails, i, getRand(4,9));
   }
-  printAll(trails, window);
+  while(1) {
+    printAll(trails, window, 1);
+    delay(40);
+  }
 
   /* int x=0;*/
   /* while(1) {*/
@@ -179,22 +182,20 @@ int getRand(int n, int m) {
   return n + rand() % (m-n);
 }
 
-void printAll(trail_t *trails, struct Window *window) {
+void printAll(trail_t *trails, struct Window *window, int incr) {
   /* printf("%d, %d\n", window->col, window->row);*/
   /* printf("Bijv: %d\n", trailArray[0].len);*/
   int i;
   trail_t *current = trails->next;
 
-  /* printf("test");*/
-  /* printf("struct: %lu", sizeof(trail_t));*/
-
   clearScreen(window);
 
   while(current != NULL) {
     printTrail(current, window);
+    current->y += incr;
     current = current->next;
   }
-  printf("\033[%d;0H", window->row);
+  /* printf("\033[%d;0H", window->row);*/
   fflush(stdout);
 
 }
