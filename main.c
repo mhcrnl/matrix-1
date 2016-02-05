@@ -117,7 +117,7 @@ void createTrail(trail_t *trails, int x, int len) {
   current->next = malloc(sizeof(trail_t));
 
   current->next->x = x;
-  current->next->y = 0; /* y always starts out at 0 */
+  current->next->y = -len; /* y always starts out at 0 */
   current->next->len = len;
   current->next->next = NULL;
 
@@ -139,6 +139,9 @@ void printTrail(trail_t *trail, struct Window *window) {
      /* Obviously we need to add i, because*/
      /* we're moving down through the trail */
     print_y = trail->y + i;
+    if(print_y < 0) {
+      continue;
+    }
 
     /* If the trail leaves the screen, stop printing */
     if(print_y > window->row) {
@@ -196,6 +199,7 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
     current = current->next;
   }
 
+  printf("\033[%d;%dH", window->row, window->col);
   fflush(stdout);
 
 }
@@ -213,7 +217,7 @@ void tryNewTrail(trail_t *trails, struct Window *window) {
   }
 
   for(int i = 0; i < window->col; i++) {
-    if(free[i] == 0 && getRand(0,4) == 1) {
+    if(free[i] == 0 && getRand(0,window->col-n) == 1) {
     /* if(free[i] == 0 ) {*/
       createTrail(trails, i, getRand(MINLEN, MAXLEN));
       break;
