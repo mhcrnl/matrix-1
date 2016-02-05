@@ -108,7 +108,7 @@ void createTrail(trail_t *trails, int x, int len) {
   current->next->next = NULL;
 
   for (i = 0; i < len; i++) {
-    current->next->seq[i] = 'a';
+    current->next->seq[i] = getRand(33, 126);
   }
 }
 
