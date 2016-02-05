@@ -55,7 +55,7 @@ int main(int argc, char *args[]) {
   /* printf("dus: %d, ofwel: %d\n", (int)( sizeof(trailArray)/sizeof(struct Trail)), window.col * 2);*/
 
   for(int i = 0; i < 5; i++) {
-    createTrail(trails, i, getRand(4,15));
+    createTrail(trails, i, getRand(4,9));
   }
   printAll(trails, window);
 
@@ -135,25 +135,27 @@ void printTrail(trail_t *trail, struct Window *window) {
 
   /* Loop through the trail */
   for(i = 0; i < trail->len; i++) {
-    /* y=0 means top of screen
-     * Obviously we need to add i, because
-     * we're moving down through the trail */
+     /* y=0 means top of screen*/
+     /* Obviously we need to add i, because*/
+     /* we're moving down through the trail */
     print_y = trail->y + i;
 
     if(print_y > window->row) {
       break;
     }
 
-    /* Trail is green, except for the head of the
-     * trail. That character is white */
+     /* Trail is green, except for the head of the*/
+     /* trail. That character is white */
     printf("%s", TRM_GREEN);
+      /* printf("Now at %d/%d\n", i, trail->len);*/
     if(i == trail->len-1) {
       printf("%s", TRM_WHITE);
+      /* printf("END!");*/
     }
 
-    /* Print the character, using ANSI to
-     * position the cursor */
-    printf("\033[%d;%dH%c", print_y, trail->x, trail->seq[i]);
+     /* Print the character, using ANSI to*/
+     /* position the cursor */
+    printf("\033[%d;%dH%c", print_y+1, trail->x+1, trail->seq[i]);
   }
 }
 
@@ -186,16 +188,13 @@ void printAll(trail_t *trails, struct Window *window) {
   /* printf("test");*/
   /* printf("struct: %lu", sizeof(trail_t));*/
 
-  /* clearScreen(window);*/
+  clearScreen(window);
 
   while(current != NULL) {
-    /* printTrail(current, window);*/
-    printf("x: %d, y: %d, len: %d\n", current->x, current->y, current->len);
+    printTrail(current, window);
     current = current->next;
   }
-
-  /* printf("Window: %dx%d\n", window->col, window->row);*/
-
+  printf("\033[%d;0H", window->row);
   fflush(stdout);
 
 }
