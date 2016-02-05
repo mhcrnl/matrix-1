@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 /* Some ANSI values */
 #define ESC "\033"
@@ -29,6 +30,8 @@ struct Window {
   int col;
 };
 
+int debug = 0;
+
 /* Function prototypes */
 void delay(int millis);
 void getWindow(struct Window *window);
@@ -41,6 +44,11 @@ void tryNewTrail(trail_t *trails, struct Window *window);
 void deleteTrail(trail_t **trails);
 
 int main(int argc, char *args[]) {
+  if(argc >= 2) {
+    if(strcmp(args[1],"-d") == 0) {
+      debug = 1;
+    }
+  }
   /* First get the window info and store it
    * in the struct */
   struct Window *window = malloc(sizeof(struct Window));
@@ -205,14 +213,18 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
     current = current->next;
   }
 
-  printf("\033[%d;0H", window->row);
 
-  current = trails->next;
-  while(current != NULL) {
-    printf("%d->", current->x);
-    current = current->next;
+  if(debug == 1) {
+    printf("\033[%d;0H", window->row);
+    current = trails->next;
+    while(current != NULL) {
+      printf("%d->", current->x);
+      current = current->next;
+    }
+    printf("#");
+  } else {
+    printf("\033[%d;%dH", window->row, window->col);
   }
-  printf("#");
 
   fflush(stdout);
 
