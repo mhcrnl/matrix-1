@@ -10,8 +10,10 @@
 #define TRM_GREEN "\033[32m"
 #define TRM_WHITE "\033[37m"
 
+/* can be modified to likings */
 #define MINLEN 20
 #define MAXLEN 35 /* The maximum length for the trails */
+#define DT 40 /*delay in milliseconds, 1/fps */
 
 
 /* Defintion of the Trail struct */
@@ -30,6 +32,7 @@ struct Window {
   int col;
 };
 
+/* global debug value, default is 0 */
 int debug = 0;
 
 /* Function prototypes */
@@ -44,6 +47,7 @@ void tryNewTrail(trail_t *trails, struct Window *window);
 void deleteTrail(trail_t **trails);
 
 int main(int argc, char *args[]) {
+  /* Check if debug flag is set */
   if(argc >= 2) {
     if(strcmp(args[1],"-d") == 0) {
       debug = 1;
@@ -63,25 +67,13 @@ int main(int argc, char *args[]) {
   trails->next = NULL;
 
   while(1) {
-    /* if(getRand(1,3) == 1) {*/
-      /* printf("yes");*/
-      /* fflush(stdout);*/
-      /* delay(500);*/
-      tryNewTrail(trails, window);
-    /* }*/
+    /* Try to add new trails */
+    tryNewTrail(trails, window);
 
+    /* Print all trails */
     printAll(trails, window, 1);
-    delay(40);
+    delay(DT);
   }
-
-  /* Testing down here */
-  /* for(int i = 0; i < window->col; i++) {*/
-  /*   createTrail(trails, i, getRand(4,9));*/
-  /* }*/
-  /* while(1) {*/
-  /*   printAll(trails, window, 1);*/
-  /*   delay(40);*/
-  /* }*/
 
   return 0;
 }
@@ -130,6 +122,7 @@ void createTrail(trail_t *trails, int x, int len) {
   current->next->len = len;
   current->next->next = NULL;
 
+  /* Create the string of random characters */
   for (i = 0; i < len; i++) {
     current->next->seq[i] = getRand(33, 126);
   }
@@ -148,6 +141,8 @@ void printTrail(trail_t *trail, struct Window *window) {
      /* Obviously we need to add i, because*/
      /* we're moving down through the trail */
     print_y = trail->y + i;
+    /* Check character is above the window, then continue to
+     * next iteration*/
     if(print_y < 0) {
       continue;
     }
@@ -206,6 +201,7 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
   while(current != NULL) {
     printTrail(current, window);
     current->y += incr; /* Increment y afterwards, so it moves down */
+    /* Check if the next 
     if(current->y > window->row) {
       deleteTrail(&previous);
     }
