@@ -201,7 +201,7 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
   while(current != NULL) {
     printTrail(current, window);
     current->y += incr; /* Increment y afterwards, so it moves down */
-    /* Check if the next 
+    /* Check if the next */
     if(current->y > window->row) {
       deleteTrail(&previous);
     }
