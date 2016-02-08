@@ -229,6 +229,7 @@ void printAll(trail_t *trails, struct Window *window, int incr) {
 void tryNewTrail(trail_t *trails, struct Window *window) {
   int *free = malloc(sizeof(int) * window->col);
   int n = 0;
+  int i;
   trail_t *current = trails->next;
 
   while(current != NULL) {
@@ -238,7 +239,7 @@ void tryNewTrail(trail_t *trails, struct Window *window) {
     current = current->next;
   }
 
-  for(int i = 0; i < window->col; i++) {
+  for(i = 0; i < window->col; i++) {
     if(free[i] == 0 && getRand(0,(window->col-n)) == 1) {
     /* if(free[i] == 0 ) {*/
       createTrail(trails, i, getRand(MINLEN, MAXLEN));
